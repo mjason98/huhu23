@@ -15,8 +15,8 @@ PARAMS = {
     "MODEL_FOLDER": "pts",
     # dataset values
     "DATA_FOLDER": "data",
-    "DATA_PATH": "data/fake_job_postings.csv",
-    "DATA_TARGET_COLUMN_NAME": "fraudulent",
+    "DATA_PATH": "data/train.csv",
+    "DATA_TARGET_COLUMN_NAME": "humor",
     "data_train": "data/train.csv",
     "data_test": "data/test.csv",
     "cat_vector": "data/cat_vector.bin",

@@ -4,7 +4,6 @@ from random import sample
 import pandas as pd
 from code.parameters import PARAMS
 
-
 def load_data(data_path: str):
     data = pd.read_csv(data_path)
     return data
