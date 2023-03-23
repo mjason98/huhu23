@@ -17,7 +17,7 @@ def save_data(data: pd.Series):
     if os.path.isfile(file_path_train) and os.path.isfile(file_path_test):
         return file_path_train, file_path_test
 
-    target_name = PARAMS["DATA_TARGET_COLUMN_NAME"]
+    target_name = 'humor'
     percent = 1.0 - PARAMS["data_percent"]
 
     data_true = data.query(target_name + "==1")

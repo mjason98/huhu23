@@ -13,15 +13,15 @@ PARAMS = {
     # model values
     "TRANS_NAME": "bert-base-uncased",
     "MODEL_FOLDER": "pts",
-    "model_type":"rf", # in ['rf', '']
+    "model_type":"rfr", # in ['rf', 'rfr']
     # dataset values
     "DATA_FOLDER": "data",
     "DATA_PATH": "data/train.csv",
     "DATA_PREDICTION_PATH": "data/train.csv",
     "DATA_TEXT_COLUMN_NAME": "tweet",
-    "DATA_TARGET_COLUMN_NAME": "humor",
-    "data_train": "data/train_humor.csv",
-    "data_test": "data/test_humor.csv",
+    "DATA_TARGET_COLUMN_NAME": "mean_prejudice", # in ['humor', 'mean_prejudice']
+    "data_train": "data/train_tmp.csv",
+    "data_test": "data/test_tmp.csv",
     "cat_vector": "data/cat_vector.bin",
     "data_percent": 0.05,
     # ...
@@ -45,10 +45,20 @@ def check_params(arg=None):
         "--lr", dest="lr", help="Learning rate value", required=False, default=0.001
     )
 
+    parse.add_argument(
+        "--modeltype", dest="modeltype", help="Model type", required=False, default="rf", choices=['rf', 'rfr']
+    )
+
+    parse.add_argument(
+        "--target", dest="target", help="Column target", required=False, default="humor", choices=['humor', 'mean_prejudice']
+    )
+
     returns = parse.parse_args(arg)
     new_params = {
         "DATA_FOLDER": returns.datafolder,
         "lr": returns.lr,
+        "DATA_TARGET_COLUMN_NAME":returns.target,
+        "model_type":returns.modeltype,
     }
 
     PARAMS.update(new_params)
