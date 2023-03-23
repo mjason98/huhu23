@@ -2,7 +2,7 @@ from code.models.basicModel import basicModel
 from code.parameters import PARAMS
 
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.metrics import classification_report
 import pandas as pd
 
@@ -28,6 +28,11 @@ class rfModel(basicModel):
 
         return data_val
 
+    def report(self, orig, pred, task):
+        metrics = classification_report(orig, pred, target_names=[f'No {task}', task],  digits=4, zero_division=1)        
+        print("# Metrics")
+        print(metrics)
+
     def fit(self):
         super().fit()
 
@@ -42,10 +47,7 @@ class rfModel(basicModel):
         self.classifier.fit(vecs_train, train[task])
         pred = self.classifier.predict(vecs_test)
 
-        metrics = classification_report(test[task], pred, target_names=[f'No {task}', task],  digits=4, zero_division=1)        
-        
-        print("# Metrics")
-        print(metrics)
+        self.report(test[task], pred, task)
     
     def predict(self) -> list:
         super().predict()
@@ -69,5 +71,18 @@ class rfModel(basicModel):
         self.classifier = joblib.load(os.path.join(PARAMS['MODEL_FOLDER'], self.model_name+'_rf.joblib'))
 
 def createRFModel(name:str) -> rfModel:
+    model = rfModel(name)
+    return model
+
+class rfrModel(rfModel):
+    def __init__(self, name) -> None:
+        super().__init__(name)
+        self.classifier = RandomForestRegressor()
+    
+    def report(self, orig, pred, task):
+        # return super().report(orig, pred, task)
+        print ('# ok')
+
+def createRFRModel(name:str) -> rfModel:
     model = rfModel(name)
     return model

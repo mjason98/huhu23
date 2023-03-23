@@ -1,5 +1,5 @@
 from code.parameters import PARAMS
-from code.models.randomForest import createRFModel
+from code.models.randomForest import createRFModel, createRFRModel
 from code.models.basicModel import basicModel
 
 import numpy as np
@@ -26,6 +26,8 @@ def _createModel():
     model: basicModel = None
     if model_type == 'rf':
         model = createRFModel(model_name)
+    elif model_type == 'rfr':
+        model = createRFRModel(model_name)
 
     return model
 
@@ -40,17 +42,15 @@ def makeModel():
 
 def predict():
     model = _createModel()
-
     model.load()
-    
     preds = model.predict()
-
-    # save predictions
-    data = pd.read_csv(PARAMS['DATA_PREDICTION_PATH'])
-    cols = list(data.columns) + ['humor']
 
     tname = PARAMS['DATA_TARGET_COLUMN_NAME']
     mname = PARAMS['model_type']
+
+    # save predictions
+    data = pd.read_csv(PARAMS['DATA_PREDICTION_PATH'])
+    cols = list(data.columns) + [tname]
 
     save_name = f"pred_{ tname }_{ mname }.csv"
     save_name = os.path.join( PARAMS["DATA_FOLDER"], save_name)
