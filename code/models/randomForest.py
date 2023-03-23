@@ -31,7 +31,7 @@ class rfModel(basicModel):
 
         train, test = self._loadData()
 
-        vecs_train = self.vectorizer.fit_transform(train).toarray()
+        vecs_train = self.vectorizer.fit_transform(train[textc]).toarray()
         vecs_test  = self.vectorizer.transform(test[textc]).toarray()
 
         self.classifier.fit(vecs_train, train[task])
