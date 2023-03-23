@@ -1,6 +1,7 @@
 import sys
 from code.parameters import check_params
 from code.data import processData
+from code.models.manager import makeModel, setSeed
 
 if __name__ == '__main__':
 
@@ -9,10 +10,11 @@ if __name__ == '__main__':
         exit(0)
 
     # Seed
-    # setSeed()
+    setSeed()
     
     # DATA PIPELINE
     processData()
 
-    # Model train 
-    # trainModel()
+    # Model
+    makeModel()
+    

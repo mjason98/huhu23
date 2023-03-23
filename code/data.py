@@ -1,8 +1,9 @@
 # data preprocesing funtions here
 
 from random import sample
-import pandas as pd
+import pandas as pd, os
 from code.parameters import PARAMS
+from code.utils import colorify
 
 def load_data(data_path: str):
     data = pd.read_csv(data_path)
@@ -12,6 +13,10 @@ def load_data(data_path: str):
 def save_data(data: pd.Series):
     file_path_train = PARAMS["data_train"]
     file_path_test = PARAMS["data_test"]
+
+    if os.path.isfile(file_path_train) and os.path.isfile(file_path_test):
+        return file_path_train, file_path_test
+
     target_name = PARAMS["DATA_TARGET_COLUMN_NAME"]
     percent = 1.0 - PARAMS["data_percent"]
 
@@ -36,12 +41,13 @@ def save_data(data: pd.Series):
 
     del data_test
 
+    print ('# Created datafiles:', colorify(file_path_test), colorify(file_path_train))
+
     return file_path_train, file_path_test
 
 # ----------------------------------------------------------------
 
 DATA_PIPELINE = [load_data, save_data]
-
 
 def processData():
     curr_value = PARAMS["DATA_PATH"]

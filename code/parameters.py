@@ -13,12 +13,14 @@ PARAMS = {
     # model values
     "TRANS_NAME": "bert-base-uncased",
     "MODEL_FOLDER": "pts",
+    "model_type":"rf", # in ['rf', '']
     # dataset values
     "DATA_FOLDER": "data",
     "DATA_PATH": "data/train.csv",
+    "DATA_TEXT_COLUMN_NAME": "tweet",
     "DATA_TARGET_COLUMN_NAME": "humor",
-    "data_train": "data/train.csv",
-    "data_test": "data/test.csv",
+    "data_train": "data/train_humor.csv",
+    "data_test": "data/test_humor.csv",
     "cat_vector": "data/cat_vector.bin",
     "data_percent": 0.05,
     # ...
@@ -28,7 +30,7 @@ PARAMS = {
 def check_params(arg=None):
     global PARAMS
 
-    parse = argparse.ArgumentParser(description="Harbour Space Fake Job Post Detector")
+    parse = argparse.ArgumentParser(description="HUHU model")
 
     parse.add_argument(
         "--datafolder",
