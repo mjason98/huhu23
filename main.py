@@ -1,7 +1,7 @@
 import sys
 from code.parameters import check_params
 from code.data import processData
-from code.models.manager import makeModel, setSeed
+from code.models.manager import makeModel, setSeed, predict
 
 if __name__ == '__main__':
 
@@ -17,4 +17,4 @@ if __name__ == '__main__':
 
     # Model
     makeModel()
-    
+    predict()

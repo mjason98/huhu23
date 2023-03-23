@@ -23,6 +23,11 @@ class rfModel(basicModel):
 
         return data_train, data_test
 
+    def _loadPredictData(self):
+        data_val = pd.read_csv(PARAMS['DATA_PREDICTION_PATH'])
+
+        return data_val
+
     def fit(self):
         super().fit()
 
@@ -42,8 +47,16 @@ class rfModel(basicModel):
         print("# Metrics")
         print(metrics)
     
-    def predict(self, X):
+    def predict(self) -> list:
         super().predict()
+
+        textc = PARAMS["DATA_TEXT_COLUMN_NAME"]
+
+        data = self._loadPredictData()
+        vecs  = self.vectorizer.transform(data[textc]).toarray()
+        pred = self.classifier.predict(vecs)
+
+        return pred.tolist()
     
     def save(self):
         super().save()

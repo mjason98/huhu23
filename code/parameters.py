@@ -17,6 +17,7 @@ PARAMS = {
     # dataset values
     "DATA_FOLDER": "data",
     "DATA_PATH": "data/train.csv",
+    "DATA_PREDICTION_PATH": "data/train.csv",
     "DATA_TEXT_COLUMN_NAME": "tweet",
     "DATA_TARGET_COLUMN_NAME": "humor",
     "data_train": "data/train_humor.csv",
