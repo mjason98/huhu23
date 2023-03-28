@@ -60,8 +60,8 @@ def predict():
     cols = list(data.columns) + [tname]
 
     save_name = f"pred_{ tname }_{ mname }.csv"
-    save_name = os.path.join( PARAMS["DATA_FOLDER"], save_name)
+    save_name = os.path.join(PARAMS["DATA_FOLDER"], save_name)
 
-    data = pd.concat([data, pd.Series(preds)], axis = 1)
+    data = pd.concat([data, pd.Series(preds)], axis=1)
 
     data.to_csv(save_name, header=cols, index=False)
