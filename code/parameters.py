@@ -13,13 +13,14 @@ PARAMS = {
     # model values
     "TRANS_NAME": "bert-base-uncased",
     "MODEL_FOLDER": "pts",
-    "model_type":"rfr", # in ['rf', 'rfr']
+    "model_type":"rf", # in ['rf', 'rfr']
+    "max_length":130,
     # dataset values
     "DATA_FOLDER": "data",
     "DATA_PATH": "data/train.csv",
     "DATA_PREDICTION_PATH": "data/train.csv",
     "DATA_TEXT_COLUMN_NAME": "tweet",
-    "DATA_TARGET_COLUMN_NAME": "mean_prejudice", # in ['humor', 'mean_prejudice']
+    "DATA_TARGET_COLUMN_NAME": "humor", # in ['humor', 'mean_prejudice']
     "data_train": "data/train_tmp.csv",
     "data_test": "data/test_tmp.csv",
     "cat_vector": "data/cat_vector.bin",

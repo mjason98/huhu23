@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 .venv
 data/*.csv
+data/*.npy
 pts/*
 # C extensions
 *.so

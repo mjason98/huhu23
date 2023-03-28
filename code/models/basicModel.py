@@ -1,5 +1,9 @@
 from code.utils import colorify
 from sklearn.metrics import classification_report, mean_squared_error
+from torch.utils.data import Dataset, DataLoader, WeightedRandomSampler
+import torch
+import pandas as pd
+from code.parameters import PARAMS
 
 def classifier_report(orig, pred, task):
     metrics = classification_report(orig,
@@ -39,3 +43,59 @@ class basicModel:
     
     def load(self):
         print('# Loading model:', colorify(self.model_name))
+
+class basicDataset(Dataset):
+    def __init__(self, csv_file):
+        self.data_frame = pd.read_csv(csv_file)
+        self.x_name = 'tweet'
+        self.id_name = 'index'
+        self.y_name = 'humor'
+
+    def __len__(self):
+        return len(self.data_frame)
+
+    def __getitem__(self, idx):
+        if torch.is_tensor(idx):
+            idx = idx.tolist()
+
+        ids = int(self.data_frame.loc[idx, self.id_name])
+        sent = self.data_frame.loc[idx, self.x_name]
+        target = int(self.data_frame.loc[idx, self.y_name])
+
+        sample = {'x': sent, 'y': target, 'id':ids}
+        return sample
+
+def getWeights(csv_path:str):
+    data = pd.read_csv(csv_path)
+    target_name = PARAMS["DATA_TARGET_COLUMN_NAME"]
+
+    positive = len(data.query(target_name + "==1"))
+    negative = len(data.query(target_name + "==0"))
+
+    wc = [negative, positive]
+
+    weights = [ 1/wc[ int( data.loc[i, target_name] ) ] for i in range(len(data)) ]
+
+    return weights
+
+
+def makeDataSet(csv_path:str, shuffle=False, balanse=False):
+    data = basicDataset(csv_path)
+    batch = PARAMS['batch']
+
+    sampler = None
+    if balanse:
+        sample_weight = getWeights(csv_path)
+        sampler = WeightedRandomSampler(weights=sample_weight, num_samples=len(data), replacement=True)
+        shuffle = None
+
+    loader =  DataLoader(data, batch_size=batch, shuffle=shuffle, num_workers=PARAMS['workers'], drop_last=False, sampler=sampler)
+    return data, loader
+
+def getDevice():
+    if torch.cuda.is_available():
+        return torch.device("cuda:0")
+    elif torch.backends.mps.is_available() and torch.backends.mps.is_built():
+        return torch.device("mps")
+    else:
+        return torch.device("cpu")

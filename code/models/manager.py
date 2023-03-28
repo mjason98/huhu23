@@ -5,11 +5,13 @@ from code.models.basicModel import basicModel
 import numpy as np
 import random, os
 import pandas as pd
+import torch
 
 
 def setSeed():
     my_seed = PARAMS['seed']
     np.random.seed(my_seed)
+    torch.manual_seed(my_seed)
     random.seed(my_seed)
 
 
