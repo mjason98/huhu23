@@ -14,7 +14,8 @@ PARAMS = {
     "TRANS_NAME": "bert-base-uncased",
     "MODEL_FOLDER": "pts",
     "model_type":"rf", # in ['rf', 'rfr']
-    "max_length":130,
+    "max_length":300,
+    "transformer_name":"hackathon-pln-es/paraphrase-spanish-distilroberta",
     # dataset values
     "DATA_FOLDER": "data",
     "DATA_PATH": "data/train.csv",
@@ -47,7 +48,7 @@ def check_params(arg=None):
     )
 
     parse.add_argument(
-        "--modeltype", dest="modeltype", help="Model type", required=False, default="rf", choices=['rf', 'rfr']
+        "--modeltype", dest="modeltype", help="Model type", required=False, default="rf", choices=['rf', 'rfr', 'rfe', 'rfer']
     )
 
     parse.add_argument(

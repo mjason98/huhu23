@@ -1,5 +1,6 @@
 from code.parameters import PARAMS
 from code.models.randomForest import createRFModel, createRFRModel
+from code.models.decodeRandomForest import createRFEModel, createRFERModel
 from code.models.basicModel import basicModel
 
 import numpy as np
@@ -30,6 +31,10 @@ def _createModel():
         model = createRFModel(model_name)
     elif model_type == 'rfr':
         model = createRFRModel(model_name)
+    elif model_type == 'rfe':
+        model = createRFEModel(model_name)
+    elif model_type == 'rfer':
+        model = createRFERModel(model_name)
 
     return model
 
