@@ -15,7 +15,7 @@ PARAMS = {
     "MODEL_FOLDER": "pts",
     "model_type":"rf", # in ['rf', 'rfr']
     "max_length":300,
-    "transformer_name":"hackathon-pln-es/paraphrase-spanish-distilroberta",
+    "transformer_name":"daveni/twitter-xlm-roberta-emotion-es",
     "balance":False,
     # dataset values
     "DATA_FOLDER": "data",
