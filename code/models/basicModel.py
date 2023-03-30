@@ -68,7 +68,11 @@ class basicDataset(Dataset):
 
         ids = int(self.data_frame.loc[idx, self.id_name])
         sent = self.data_frame.loc[idx, self.x_name]
-        target = int(self.data_frame.loc[idx, self.y_name])
+
+        try:
+            target = int(self.data_frame.loc[idx, self.y_name])
+        except:
+            target = 0
 
         sample = {'x': sent, 'y': target, 'id':ids}
         return sample

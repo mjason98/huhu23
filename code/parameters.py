@@ -15,12 +15,12 @@ PARAMS = {
     "MODEL_FOLDER": "pts",
     "model_type":"rf", # in ['rf', 'rfr']
     "max_length":300,
-    "transformer_name":"daveni/twitter-xlm-roberta-emotion-es",
+    "transformer_name":"Manauu17/enhanced_roberta_sentiments_es",
     "balance":False,
     # dataset values
     "DATA_FOLDER": "data",
     "DATA_PATH": "data/train.csv",
-    "DATA_PREDICTION_PATH": "data/train.csv",
+    "DATA_PREDICTION_PATH": "data/demo.csv",
     "DATA_TEXT_COLUMN_NAME": "tweet",
     "DATA_TARGET_COLUMN_NAME": "humor", # in ['humor', 'mean_prejudice']
     "data_train": "data/train_tmp.csv",
