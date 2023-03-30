@@ -3,6 +3,7 @@ from code.parameters import PARAMS
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
+from imblearn.over_sampling import SMOTE
 import pandas as pd
 
 import joblib, os
@@ -44,7 +45,14 @@ class rfModel(basicModel):
         vecs_train = self.vectorizer.fit_transform(train[textc]).toarray()
         vecs_test = self.vectorizer.transform(test[textc]).toarray()
 
-        self.classifier.fit(vecs_train, train[task])
+        y_train = train[task]
+
+        if PARAMS["balance"]:
+            print ('  Balance SMOTE applied')
+            oversample = SMOTE()
+            vecs_train, y_train = oversample.fit_resample(vecs_train, y_train)
+
+        self.classifier.fit(vecs_train, y_train)
         pred = self.classifier.predict(vecs_test)
 
         self.report(test[task], pred, task)
