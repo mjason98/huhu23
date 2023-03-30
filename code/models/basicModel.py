@@ -1,6 +1,8 @@
 from code.utils import colorify
 from sklearn.metrics import classification_report, mean_squared_error
 from torch.utils.data import Dataset, DataLoader, WeightedRandomSampler
+from imblearn.over_sampling import SMOTE, SMOTENC
+
 import torch
 import pandas as pd
 from code.parameters import PARAMS
@@ -25,6 +27,12 @@ class basicModel:
         self.vectorizer = None 
         self.model_name = name
         self.report_function = 0
+    
+    def getBalanceForArrays(self):
+        if self.report_function == 0:
+            return SMOTE()
+        else:
+            raise BaseException("currently there is not a package to balance continous data")
     
     def report(self, orig, pred, task):
         if self.report_function == 0:
@@ -79,12 +87,12 @@ def getWeights(csv_path:str):
     return weights
 
 
-def makeDataSet(csv_path:str, shuffle=False, balanse=False):
+def makeDataSet(csv_path:str, shuffle=False, balance=False):
     data = basicDataset(csv_path)
     batch = PARAMS['batch']
 
     sampler = None
-    if balanse:
+    if balance:
         sample_weight = getWeights(csv_path)
         sampler = WeightedRandomSampler(weights=sample_weight, num_samples=len(data), replacement=True)
         shuffle = None

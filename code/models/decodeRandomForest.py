@@ -7,7 +7,6 @@ import pandas as pd
 import joblib, os
 
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
-from imblearn.over_sampling import SMOTE
 
 class rfBasedOnEncoder(basicModel):
 
@@ -42,7 +41,7 @@ class rfBasedOnEncoder(basicModel):
 
         if PARAMS["balance"]:
             print ('  Balance SMOTE applied')
-            oversample = SMOTE()
+            oversample = self.getBalanceForArrays()
             vecs_train, y_train = oversample.fit_resample(vecs_train, y_train)
 
         self.classifier.fit(vecs_train, y_train)
