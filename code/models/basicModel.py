@@ -5,6 +5,7 @@ from imblearn.over_sampling import SMOTE, SMOTENC
 
 import torch
 import pandas as pd
+import numpy as np
 from code.parameters import PARAMS
 
 def classifier_report(orig, pred, task):
@@ -100,6 +101,42 @@ def makeDataSet(csv_path:str, shuffle=False, balance=False):
         sample_weight = getWeights(csv_path)
         sampler = WeightedRandomSampler(weights=sample_weight, num_samples=len(data), replacement=True)
         shuffle = None
+
+    loader =  DataLoader(data, batch_size=batch, shuffle=shuffle, num_workers=PARAMS['workers'], drop_last=False, sampler=sampler)
+    return data, loader
+
+class npsDataset(Dataset):
+    def __init__(self, X:np.array, y:np.array|None):
+        assert X.shape[0] == y.shape[0]
+
+        self.X = X
+        self.y = y
+
+    def __len__(self):
+        return len(self.X[0].shape)
+
+    def __getitem__(self, idx):
+        if torch.is_tensor(idx):
+            idx = idx.tolist()
+
+        vect = self.X[idx]
+
+        target = 0
+        if self.y is not None:
+            target = self.y[idx]
+
+        sample = {'x': vect, 'y': target, 'id':0}
+        return sample
+
+def makeNPSDataset(X:np.array, y:np.array|None=None, shuffle=False, balance=False):
+    data = npsDataset(X, y)
+    batch = PARAMS['batch']
+
+    sampler = None
+    # if balance:
+    #     sample_weight = getWeights(csv_path)
+    #     sampler = WeightedRandomSampler(weights=sample_weight, num_samples=len(data), replacement=True)
+    #     shuffle = None
 
     loader =  DataLoader(data, batch_size=batch, shuffle=shuffle, num_workers=PARAMS['workers'], drop_last=False, sampler=sampler)
     return data, loader

@@ -5,7 +5,7 @@ PARAMS = {
     # general parameters
     "seed": 1234567,
     # train parameters
-    "lr": 0.001,
+    "lr": 5e-5,
     "optim": "adam",
     "workers": 2,
     "batch": 12,
@@ -49,7 +49,7 @@ def check_params(arg=None):
     )
 
     parse.add_argument(
-        "--modeltype", dest="modeltype", help="Model type", required=False, default="rf", choices=['rf', 'rfr', 'rfe', 'rfer']
+        "--modeltype", dest="modeltype", help="Model type", required=False, default="rf", choices=['rf', 'rfr', 'rfe', 'rfer', 'se']
     )
 
     parse.add_argument(
