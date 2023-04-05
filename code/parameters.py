@@ -9,7 +9,7 @@ PARAMS = {
     "optim": "adam",
     "workers": 2,
     "batch": 12,
-    "epochs": 20,
+    "epochs": 100,
     "random_pair_selection_rate":3,
     # model values
     "TRANS_NAME": "bert-base-uncased",

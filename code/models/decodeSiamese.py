@@ -92,10 +92,10 @@ class siameseOnEncoder(basicModel):
         vecs_train = train['x']
         y_train = train['y']
 
-        if PARAMS["balance"]:
-            print ('  Balance SMOTE applied')
-            oversample = self.getBalanceForArrays()
-            vecs_train, y_train = oversample.fit_resample(vecs_train, y_train)
+        # if PARAMS["balance"]:
+        #     print ('  Balance SMOTE applied')
+        #     oversample = self.getBalanceForArrays()
+        #     vecs_train, y_train = oversample.fit_resample(vecs_train, y_train)
 
         device = getDevice()
         self.classifier = seameseModel(vec_size, vec_size//2)
@@ -103,14 +103,15 @@ class siameseOnEncoder(basicModel):
 
         optim = self.classifier.makeOptimizer(lr=PARAMS["lr"], algorithm=PARAMS["optim"])
 
-        dataT , dataTL = makeNPSDataset(vecs_train, y_train, True, False)
+        dataT , dataTL = makeNPSDataset(vecs_train, y_train, True, PARAMS["balance"])
         _ , dataVL = makeNPSDataset(test['x'], test['y'], False, False)
 
-        # del train
-        # del test 
 
         for e in range(1, epochs+1):
             print (f"# Start epoch {e}/{epochs}")
+
+            if (e+1)%PARAMS["random_pair_selection_rate"]:
+                dataT.calculatePairs()
 
             for dname in ['train', 'val']:
                 
