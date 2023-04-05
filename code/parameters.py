@@ -5,11 +5,12 @@ PARAMS = {
     # general parameters
     "seed": 1234567,
     # train parameters
-    "lr": 5e-5,
+    "lr": 1e-6,
     "optim": "adam",
     "workers": 2,
     "batch": 12,
-    "epochs": 2,
+    "epochs": 20,
+    "random_pair_selection_rate":3,
     # model values
     "TRANS_NAME": "bert-base-uncased",
     "MODEL_FOLDER": "pts",

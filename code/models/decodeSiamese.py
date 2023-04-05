@@ -28,8 +28,9 @@ class seameseModel(nn.Module):
     def __init__(self, input_size, hidden_size) -> None:
         super().__init__()
         self.input_size = input_size
-        self.net = nn.Sequential( nn.Linear(input_size, hidden_size), nn.Tanh(), 
-                                  nn.Linear(hidden_size, hidden_size//2), nn.Tanh() )
+        self.net = nn.Sequential( nn.Linear(input_size, hidden_size), nn.ReLU(), 
+                                  nn.Linear(hidden_size, hidden_size), nn.ReLU(),
+                                  nn.Linear(hidden_size, hidden_size//2), nn.ReLU())
         # self.distanse = nn.CosineSimilarity()
         self.criterion = ContrastiveLoss()
 
@@ -86,19 +87,27 @@ class siameseOnEncoder(basicModel):
         model_path = os.path.join(PARAMS['MODEL_FOLDER'],  f'{self.model_name}.pt')
 
         train, test = self._loadData(task)
-        vec_size = train['x'].shape[0]
+        vec_size = train['x'].shape[1]
 
-        # if PARAMS["balance"]:
-        #     print ('  Balance SMOTE applied')
-        #     oversample = self.getBalanceForArrays()
-        #     vecs_train, y_train = oversample.fit_resample(vecs_train, y_train)
+        vecs_train = train['x']
+        y_train = train['y']
+
+        if PARAMS["balance"]:
+            print ('  Balance SMOTE applied')
+            oversample = self.getBalanceForArrays()
+            vecs_train, y_train = oversample.fit_resample(vecs_train, y_train)
 
         device = getDevice()
         self.classifier = seameseModel(vec_size, vec_size//2)
-        self.classifier.eval()
         self.classifier.to(device=device)
 
         optim = self.classifier.makeOptimizer(lr=PARAMS["lr"], algorithm=PARAMS["optim"])
+
+        dataT , dataTL = makeNPSDataset(vecs_train, y_train, True, False)
+        _ , dataVL = makeNPSDataset(test['x'], test['y'], False, False)
+
+        # del train
+        # del test 
 
         for e in range(1, epochs+1):
             print (f"# Start epoch {e}/{epochs}")
@@ -108,13 +117,12 @@ class siameseOnEncoder(basicModel):
                 dataref = None
                 if dname == 'train':
                     self.classifier.train()
-                    dataref = train
+                    dataref = dataTL
                 else:
                     self.classifier.eval()
-                    dataref = test
-
-                _, data = makeNPSDataset(dataref['x'], dataref['y'], dname == 'train', False)
-                iter = tqdm(data, f'{dname}')
+                    dataref = dataVL
+                
+                iter = tqdm(dataref, f'{dname}')
 
                 total_loss, dl, best_score = 0., 0, 0.
             
@@ -141,7 +149,7 @@ class siameseOnEncoder(basicModel):
                     best_score = total_loss
                     self.classifier.save(model_path)
 
-                print('# {} epoch {} Loss {:.3} Acc {:.3}{}'.format(dname, e, total_loss/dl, '*' if total_loss == best_score else ' '))
+                print('# {} epoch {} Loss {:.5}'.format(dname, e, total_loss/dl, '*' if total_loss == best_score else ' '))
 
     def predict(self):
         super().predict()

@@ -1,12 +1,14 @@
 from code.utils import colorify
 from sklearn.metrics import classification_report, mean_squared_error
 from torch.utils.data import Dataset, DataLoader, WeightedRandomSampler
-from imblearn.over_sampling import SMOTE, SMOTENC
+from imblearn.over_sampling import SMOTE
 
 import torch
 import pandas as pd
 import numpy as np
 from code.parameters import PARAMS
+
+from random import choices
 
 def classifier_report(orig, pred, task):
     metrics = classification_report(orig,
@@ -91,6 +93,14 @@ def getWeights(csv_path:str):
 
     return weights
 
+def getWeightsNP(y:np.ndarray):
+    pw = 1. / (y == 1).sum()
+    pn = 1. / (y == 0).sum()
+    
+    weights = y * pw + (1 - y) * pn 
+    
+    return weights.tolist()
+
 
 def makeDataSet(csv_path:str, shuffle=False, balance=False):
     data = basicDataset(csv_path)
@@ -106,37 +116,64 @@ def makeDataSet(csv_path:str, shuffle=False, balance=False):
     return data, loader
 
 class npsDataset(Dataset):
-    def __init__(self, X:np.array, y:np.array|None):
+    def __init__(self, X:np.ndarray, y:np.ndarray|None):
         assert X.shape[0] == y.shape[0]
 
         self.X = X
         self.y = y
+        
+        self.parity = np.array(choices([0,1], k=X.shape[0]), dtype=np.int8)
+        self.pairs  = np.array([0] * X.shape[0], dtype=np.int32)
+
+        self.auxiliarInx = np.array(range(X.shape[0]), dtype=np.int32)
+        
+        self.calculatePairs()
+    
+    def _chose(self, idx, pm, nm):
+        if self.parity[idx] == 0:
+            return np.random.choice(self.auxiliarInx[nm])
+        else:
+            return np.random.choice(self.auxiliarInx[pm])
+        
+    def calculatePairs(self):
+        self.parity = self.parity ^ 1
+
+        positive_mask = (self.y == 1)
+        negative_mask = (self.y == 0)
+
+        pairs_list = list(map(lambda x: self._chose(x, positive_mask, negative_mask), range(self.X.shape[0])))
+
+        self.pairs = np.array(pairs_list, dtype=np.int32)
+
 
     def __len__(self):
-        return len(self.X[0].shape)
+        return self.X.shape[0]
 
     def __getitem__(self, idx):
         if torch.is_tensor(idx):
             idx = idx.tolist()
 
-        vect = self.X[idx]
+        vect = torch.from_numpy(np.concatenate([self.X[idx], self.X[ self.pairs[idx] ] ]))
+
+        # print (vect.shape)
 
         target = 0
         if self.y is not None:
-            target = self.y[idx]
+            target = 0 if self.y[idx] == self.y[ self.pairs[idx] ] else 1
 
-        sample = {'x': vect, 'y': target, 'id':0}
+        sample = {'x': vect, 'y': target}
         return sample
 
-def makeNPSDataset(X:np.array, y:np.array|None=None, shuffle=False, balance=False):
+def makeNPSDataset(X:np.ndarray, y:np.ndarray|None=None, shuffle=False, balance=False):
     data = npsDataset(X, y)
     batch = PARAMS['batch']
 
     sampler = None
-    # if balance:
-    #     sample_weight = getWeights(csv_path)
-    #     sampler = WeightedRandomSampler(weights=sample_weight, num_samples=len(data), replacement=True)
-    #     shuffle = None
+    if balance:
+        sample_weight = getWeightsNP(y)
+        
+        sampler = WeightedRandomSampler(weights=sample_weight, num_samples=len(data), replacement=True)
+        shuffle = None
 
     loader =  DataLoader(data, batch_size=batch, shuffle=shuffle, num_workers=PARAMS['workers'], drop_last=False, sampler=sampler)
     return data, loader
