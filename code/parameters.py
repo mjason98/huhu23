@@ -18,6 +18,7 @@ PARAMS = {
     "max_length":300,
     "transformer_name":"Manauu17/enhanced_roberta_sentiments_es",
     "balance":False,
+    "n_references":100,
     # dataset values
     "DATA_FOLDER": "data",
     "DATA_PATH": "data/train.csv",

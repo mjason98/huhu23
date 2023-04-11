@@ -10,6 +10,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch
 
+from sklearn.cluster import KMeans
+
 from tqdm import tqdm
 
 class ContrastiveLoss(nn.Module):
@@ -79,6 +81,25 @@ class siameseOnEncoder(basicModel):
             "x": test,
             "y": data_test
         }
+    
+    def _extract_reference(self, X, y):
+        clusters = PARAMS['n_references']
+        
+        positive = X[ y == 1 ]
+        negative = X[ y == 0 ]
+
+        assert positive.shape[0] >= clusters
+        assert negative.shape[0] >= clusters
+
+        for dname, data in zip(['positive','negative'], [positive, negative]):
+            temporal_name = os.path.join(PARAMS['DATA_FOLDER'], f'.refs_{dname}.npy')
+
+            print (f"# {dname} reference extraction")
+
+            kmeans = KMeans(n_clusters=clusters, random_state=PARAMS["seed"], n_init="auto").fit(data)
+            refs = kmeans.cluster_centers_
+
+            np.save(temporal_name, refs)
 
     def fit(self):
         super().fit()
@@ -92,10 +113,7 @@ class siameseOnEncoder(basicModel):
         vecs_train = train['x']
         y_train = train['y']
 
-        # if PARAMS["balance"]:
-        #     print ('  Balance SMOTE applied')
-        #     oversample = self.getBalanceForArrays()
-        #     vecs_train, y_train = oversample.fit_resample(vecs_train, y_train)
+        self._extract_reference(vecs_train, y_train)
 
         device = getDevice()
         self.classifier = seameseModel(vec_size, vec_size//2)
@@ -125,7 +143,7 @@ class siameseOnEncoder(basicModel):
                 
                 iter = tqdm(dataref, f'{dname}')
 
-                total_loss, dl, best_score = 0., 0, 0.
+                total_loss, dl, best_score = 0., 0, 1e9
             
                 for batch in iter:
                     optim.zero_grad()
@@ -154,6 +172,15 @@ class siameseOnEncoder(basicModel):
 
     def predict(self):
         super().predict()
+
+        refs_pos = np.load(os.path.join(PARAMS['DATA_FOLDER'], f'.refs_positive.npy'))
+        refs_neg = np.load(os.path.join(PARAMS['DATA_FOLDER'], f'.refs_negative.npy'))
+
+        
+
+        
+
+
 
         # pred_vecs = encodePredictData()
         # pred_vecs = np.load(pred_vecs)
