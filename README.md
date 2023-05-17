@@ -27,3 +27,6 @@ Model to participate un HUHU-2023 Iberlef
 | daveni/twitter-xlm-roberta-emotion-es             | MaxPool with AttMask |      No          | Random Forest    | 0.7547 | 0.8000 |        |
 | daveni/twitter-xlm-roberta-emotion-es             | MaxPool with AttMask |      SMOTE       | Random Forest    | 0.7826 | 0.8148 |        |
 | daveni/twitter-xlm-roberta-emotion-es             | MaxPool with AttMask |      No          | Random Forest    |        |        | 0.4296 |
+| Manauu17/enhanced_roberta_sentiments_es           | Transfr with AttMask |      No          |        -         | 0.7753 | 0.8074 |        |
+| Manauu17/enhanced_roberta_sentiments_es           | Transfr with AttMask |      Yes         |        -         | 0.7977 | 0.8222 |        |
+| Manauu17/enhanced_roberta_sentiments_es           | Transfr with First |      Yes         |        -         | **0.8025** | **0.8296** |        |

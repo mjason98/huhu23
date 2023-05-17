@@ -34,7 +34,7 @@ class trcModel(nn.Module):
         sentence_embeddings = self.mean_pooling(model_output, encoded_input['attention_mask'])
         # Normalize embeddings
         sentence_embeddings = F.normalize(sentence_embeddings, p=2, dim=1)
-
+        # sentence_embeddings = model_output[0][:,0]
         return self.net2(sentence_embeddings)
 
     def makeOptimizer(self, lr=5e-5, lr_factor=9/10, decay=2e-5, algorithm='adam'):
@@ -46,7 +46,7 @@ class trcModel(nn.Module):
             pars.append(D)
         try:
             lr *= lr_factor
-            D = {'params':self.bert.pooler.parameters(), 'lr':lr}
+            D = {'params':self.net1.pooler.parameters(), 'lr':lr}
             pars.append(D)
         except:
             print('#Warning: Pooler layer not found')
@@ -81,19 +81,20 @@ class tedModel(basicModel):
         super().fit()
 
         epochs = PARAMS["ted_epochs"]
-        optim = self.classifier.makeOptimizer()
+        optim = self.classifier.makeOptimizer(lr=PARAMS["lr"], algorithm=PARAMS["optim"])
 
         iter_labels_and_data = [
             ('train', makeDataSet(PARAMS[f"data_train"], True, PARAMS["balance"])[1]),
             ('test', makeDataSet(PARAMS[f"data_test"], False, False)[1])
         ]
 
+        best_acc = 0.
+
         for e in range(epochs):
             for dname, data in iter_labels_and_data:
                 print (f'# {dname} epoch {e}')
                 
-                total_loss, total_acc, dl = 0., 0., 0
-                best_acc = 0.
+                total_loss, total_acc, dl = 0., 0., 0        
                 
                 iterd = tqdm(data, f'{dname}')
 

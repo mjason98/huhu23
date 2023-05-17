@@ -37,6 +37,8 @@ PARAMS = {
 def check_params(arg=None):
     global PARAMS
 
+    os.environ['TOKENIZERS_PARALLELISM'] = "true"
+
     parse = argparse.ArgumentParser(description="HUHU model")
 
     parse.add_argument(
