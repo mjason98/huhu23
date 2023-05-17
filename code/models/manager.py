@@ -3,6 +3,7 @@ from code.models.randomForest import createRFModel, createRFRModel
 from code.models.decodeRandomForest import createRFEModel, createRFERModel
 from code.models.decodeSiamese import createSEModel
 from code.models.basicModel import basicModel
+from code.models.transformerED import createTEDModel
 
 import numpy as np
 import random, os
@@ -38,6 +39,8 @@ def _createModel():
         model = createRFERModel(model_name)
     elif model_type == 'se':
         model = createSEModel(model_name)
+    elif model_type == 'ted':
+        model = createTEDModel(model_name)
 
     return model
 

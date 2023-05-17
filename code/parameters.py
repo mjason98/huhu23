@@ -10,11 +10,12 @@ PARAMS = {
     "workers": 2,
     "batch": 12,
     "epochs": 100,
+    "ted_epochs":2,
     "random_pair_selection_rate":3,
     # model values
     "TRANS_NAME": "bert-base-uncased",
     "MODEL_FOLDER": "pts",
-    "model_type":"rf", # in ['rf', 'rfr']
+    "model_type":"ted", # in ['rf', 'rfr']
     "max_length":300,
     "transformer_name":"Manauu17/enhanced_roberta_sentiments_es",
     "balance":False,
@@ -22,7 +23,7 @@ PARAMS = {
     # dataset values
     "DATA_FOLDER": "data",
     "DATA_PATH": "data/train.csv",
-    "DATA_PREDICTION_PATH": "data/demo.csv",
+    "DATA_PREDICTION_PATH": "data/test.csv",
     "DATA_TEXT_COLUMN_NAME": "tweet",
     "DATA_TARGET_COLUMN_NAME": "humor", # in ['humor', 'mean_prejudice']
     "data_train": "data/train_tmp.csv",
@@ -51,7 +52,7 @@ def check_params(arg=None):
     )
 
     parse.add_argument(
-        "--modeltype", dest="modeltype", help="Model type", required=False, default="rf", choices=['rf', 'rfr', 'rfe', 'rfer', 'se']
+        "--modeltype", dest="modeltype", help="Model type", required=False, default="rf", choices=['rf', 'rfr', 'rfe', 'rfer', 'se', 'ted']
     )
 
     parse.add_argument(
