@@ -17,7 +17,7 @@ PARAMS = {
     "MODEL_FOLDER": "pts",
     "model_type":"ted", # in ['rf', 'rfr']
     "max_length":300,
-    "transformer_name":"Manauu17/enhanced_roberta_sentiments_es",
+    "transformer_name":"hackathon-pln-es/paraphrase-spanish-distilroberta",
     "balance":False,
     "n_references":100,
     # dataset values
