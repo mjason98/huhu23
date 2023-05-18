@@ -29,12 +29,7 @@ class trcModel(nn.Module):
 
     def forward(self, encoded_input):
         model_output = self.net1(**encoded_input)
-        # model_ouput[0]
-        # Perform pooling
-        sentence_embeddings = self.mean_pooling(model_output, encoded_input['attention_mask'])
-        # Normalize embeddings
-        sentence_embeddings = F.normalize(sentence_embeddings, p=2, dim=1)
-        # sentence_embeddings = model_output[0][:,0]
+        sentence_embeddings = model_output[0][:,0]
         return self.net2(sentence_embeddings)
 
     def makeOptimizer(self, lr=5e-5, lr_factor=9/10, decay=2e-5, algorithm='adam'):
