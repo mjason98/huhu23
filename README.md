@@ -1,5 +1,5 @@
 # huhu23
-Model to participate un HUHU-2023 Iberlef.
+Model to participate un HUHU-2023 Iberlef. The offitial results can be found in the [huhu site](https://sites.google.com/view/huhuatiberlef23/results?authuser=0), our team was MJR.
 
 
 ## Results
