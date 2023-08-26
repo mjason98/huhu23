@@ -11,7 +11,7 @@ if __name__ == '__main__':
 
     # Seed
     setSeed()
-    
+
     # DATA PIPELINE
     processData()
 

@@ -6,7 +6,8 @@ from code.models.basicModel import basicModel
 from code.models.transformerED import createTEDModel
 
 import numpy as np
-import random, os
+import random
+import os
 import pandas as pd
 import torch
 

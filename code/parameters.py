@@ -10,16 +10,16 @@ PARAMS = {
     "workers": 2,
     "batch": 12,
     "epochs": 100,
-    "ted_epochs":2,
-    "random_pair_selection_rate":3,
+    "ted_epochs": 12,
+    "random_pair_selection_rate": 3,
     # model values
     "TRANS_NAME": "bert-base-uncased",
     "MODEL_FOLDER": "pts",
-    "model_type":"ted", # in ['rf', 'rfr']
-    "max_length":300,
-    "transformer_name":"hackathon-pln-es/paraphrase-spanish-distilroberta",
-    "balance":False,
-    "n_references":100,
+    "model_type": "ted",
+    "max_length": 300,
+    "transformer_name": "Manauu17/enhanced_roberta_sentiments_es",
+    "balance": False,
+    "n_references": 100,
     # dataset values
     "DATA_FOLDER": "data",
     "DATA_PATH": "data/train.csv",
@@ -61,16 +61,16 @@ def check_params(arg=None):
         "--target", dest="target", help="Column target", required=False, default="humor", choices=['humor', 'mean_prejudice']
     )
 
-    parse.add_argument('--balance', help='Apply balance tecnique to the unbalance data', 
+    parse.add_argument('--balance', help='Apply balance tecnique to the unbalance data',
 					   required=False, action='store_true', default=False)
 
     returns = parse.parse_args(arg)
     new_params = {
         "DATA_FOLDER": returns.datafolder,
         "lr": returns.lr,
-        "DATA_TARGET_COLUMN_NAME":returns.target,
-        "model_type":returns.modeltype,
-        "balance":returns.balance,
+        "DATA_TARGET_COLUMN_NAME": returns.target,
+        "model_type": returns.modeltype,
+        "balance": returns.balance,
     }
 
     PARAMS.update(new_params)
