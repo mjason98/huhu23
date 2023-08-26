@@ -11,6 +11,8 @@ import os
 import pandas as pd
 import torch
 
+os.environ['TOKENIZERS_PARALLELISM'] = "true"
+
 
 def setSeed():
     my_seed = PARAMS['seed']
