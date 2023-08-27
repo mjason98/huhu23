@@ -44,6 +44,7 @@ since it was the most affected by the imbalance as it had the fewest samples.
 | model/team                          | F1-score |
 |-------------------------------------|:---------|
 | competition best team               | 0.820    |
+| competition firs baseline (all true)| 0.492    |
 | our best model                      | 0.779    |
 | our second best model               | 0.772    |
 | gpt-3.5-turbo (basic)               | 0.477    |
