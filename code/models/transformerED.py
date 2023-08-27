@@ -61,7 +61,7 @@ class tedModel(basicModel):
 
     def __init__(self, name) -> None:
         super().__init__(name)
-        
+
         transformer_name = PARAMS["transformer_name"]
 
         self.mxlenght = PARAMS['max_length']
@@ -88,17 +88,16 @@ class tedModel(basicModel):
         for e in range(epochs):
             for dname, data in iter_labels_and_data:
                 print (f'# {dname} epoch {e}')
-                
-                total_loss, total_acc, dl = 0., 0., 0        
-                
+
+                total_loss, total_acc, dl = 0., 0., 0
+
                 iterd = tqdm(data, f'{dname}')
 
                 if dname == 'train':
                     self.classifier.train()
-                    optim.zero_grad()
                 else:
                     self.classifier.eval()
-                
+
                 with torch.set_grad_enabled(dname == 'train'):
                     for batch in iterd:
                         encoded_input = self.vectorizer(batch['x'], padding=True, truncation=True, return_tensors='pt', max_length=self.mxlenght).to(device=self.device)
@@ -111,19 +110,20 @@ class tedModel(basicModel):
                         if dname == 'train':
                             loss.backward()
                             optim.step()
-                        
+                            optim.zero_grad()
+
                         total_loss += loss.item() * y.shape[0]
                         total_acc += (y == y_hat.argmax(dim=-1).flatten()).sum().item()
                         dl += y.shape[0]
-                
+
                 if dname == 'test' and total_acc > best_acc:
                     best_acc = total_acc
                     self.save()
-        
+
         self.load()
 
         self.custom_report(iter_labels_and_data[1][1])
-    
+
     def custom_report(self, data):
         task = PARAMS["DATA_TARGET_COLUMN_NAME"]
 
@@ -137,10 +137,10 @@ class tedModel(basicModel):
                 encoded_input = self.vectorizer(batch['x'], padding=True, truncation=True, return_tensors='pt', max_length=self.mxlenght).to(device=self.device)
                 y_hat = self.classifier(encoded_input)
                 y_hat = y_hat.argmax(dim=-1).squeeze()
-                
+
                 preds.append(y_hat.cpu().numpy())
                 ori.append(batch['y'].squeeze().numpy())
-        
+
         preds = np.concatenate(preds, axis=0)
         ori = np.concatenate(ori, axis=0)
 
@@ -162,16 +162,16 @@ class tedModel(basicModel):
                 encoded_input = self.vectorizer(batch['x'], padding=True, truncation=True, return_tensors='pt', max_length=self.mxlenght).to(device=self.device)
                 y_hat = self.classifier(encoded_input)
                 y_hat = y_hat.argmax(dim=-1).squeeze()
-                
+
                 preds.append(y_hat.cpu().numpy())
-        
+
         preds = np.concatenate(preds, axis=0)
         return preds.tolist()
 
     def save(self):
         super().save()
         save_path = os.path.join(PARAMS['MODEL_FOLDER'], self.model_name + '.pt')
-        self.classifier.save(save_path)        
+        self.classifier.save(save_path)
 
     def load(self):
         super().load()

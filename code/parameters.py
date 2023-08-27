@@ -5,8 +5,8 @@ PARAMS = {
     # general parameters
     "seed": 1234567,
     # train parameters
-    "lr": 1e-6,
-    "optim": "adam",
+    "lr": 5e-5,
+    "optim": "rms",
     "workers": 2,
     "batch": 12,
     "epochs": 100,
