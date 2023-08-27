@@ -1,5 +1,7 @@
-# huhu23
-Model to participate un HUHU-2023 Iberlef.
+# HuHu 2023
+
+This repo contains some models employed by the team MJR in
+HUHU-2023 Iberlef.
 
 ## Run and Train
 
