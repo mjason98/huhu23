@@ -30,3 +30,15 @@ Model to participate un HUHU-2023 Iberlef. The offitial results can be found in 
 | Manauu17/enhanced_roberta_sentiments_es           | Transfr with AttMask |      No          |        -         | 0.7753 | 0.8074 |        |
 | Manauu17/enhanced_roberta_sentiments_es           | Transfr with AttMask |      Yes         |        -         | 0.7977 | 0.8222 |        |
 | Manauu17/enhanced_roberta_sentiments_es           | Transfr with First |      Yes         |        -         | **0.8025** | **0.8296** |        |
+
+## Official Results
+
+
+the competition best model | 0.820
+
+our best model | 0.779
+our second best model | 0.772
+gpt-3.5-turbo | basic | 0.477
+            | fine-tuned | 0.823
+            | promt ingenired | 0.555
+
