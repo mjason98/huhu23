@@ -1,8 +1,28 @@
 # huhu23
-Model to participate un HUHU-2023 Iberlef. The offitial results can be found in the [huhu site](https://sites.google.com/view/huhuatiberlef23/results?authuser=0), our team was MJR.
+Model to participate un HUHU-2023 Iberlef.
+
+## Run and Train
+
+First install dependencies
+```shell
+python -m venv venv
+source venv/bin/activate
+pip install -r requeriments.txt
+```
+
+to train and predict with our best model
+
+```shell
+python main.py --modeltype ted --balance
+```
+
+for more help use
+```shell
+python main.py --help
+```
 
 
-## Results
+## Experiemntal Results
 
 | encoder                                           |   vector selection   |  Data balancing  | last layer model | F-1    | ACC    | MSE    |
 |---------------------------------------------------|:--------------------:|:----------------:|------------------|--------|--------|--------|
@@ -33,12 +53,18 @@ Model to participate un HUHU-2023 Iberlef. The offitial results can be found in 
 
 ## Official Results
 
+The offitial results can be found in the [huhu site](https://sites.google.com/view/huhuatiberlef23/results?authuser=0), our team was MJR.
 
-the competition best model | 0.820
 
-our best model | 0.779
-our second best model | 0.772
-gpt-3.5-turbo | basic | 0.477
-            | fine-tuned | 0.823
-            | promt ingenired | 0.555
+The organizers uses as score the F1 metric, but only taking into account the humor class,
+as it was the one more affected by unbalanze being the one with lesser samples.
 
+
+| model/team                          | F1-score |
+|-------------------------------------|:---------|
+| competition best team               | 0.820    |
+| our best model                      | 0.779    |
+| our second best model               | 0.772    |
+| gpt-3.5-turbo (basic)               | 0.477    |
+| gpt-3.5-turbo (prompt engineering)  | 0.555    |
+| gpt-3.5-turbo (fine-tuned)          | 0.823    |
