@@ -1,6 +1,8 @@
 # Results
 
-....
+The first table expresses the experiment performed during the contest.
+**idf-tf** encoder is the use of the IDF-TF technique to vectorize text
+and the rest are transformers.
 
 ## Experiemntal Results
 
@@ -29,15 +31,14 @@
 | daveni/twitter-xlm-roberta-emotion-es             | MaxPool with AttMask |      No          | Random Forest    |        |        | 0.4296 |
 | Manauu17/enhanced_roberta_sentiments_es           | Transfr with AttMask |      No          |        -         | 0.7753 | 0.8074 |        |
 | Manauu17/enhanced_roberta_sentiments_es           | Transfr with AttMask |      Yes         |        -         | 0.7977 | 0.8222 |        |
-| Manauu17/enhanced_roberta_sentiments_es           | Transfr with First |      Yes         |        -         | **0.8025** | **0.8296** |        |
+| Manauu17/enhanced_roberta_sentiments_es           | Transfr with First   |      Yes         |        -         | **0.8025** | **0.8296** |        |
 
 ## Official Results
 
 The offitial results can be found in the [huhu site](https://sites.google.com/view/huhuatiberlef23/results?authuser=0), our team was MJR.
 
-
-The organizers uses as score the F1 metric, but only taking into account the humor class,
-as it was the one more affected by unbalanze being the one with lesser samples.
+The organizers use the F1 metric as the score, but only taking into account the humor class,
+since it was the most affected by the imbalance as it had the fewest samples.
 
 
 | model/team                          | F1-score |
